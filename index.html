@@ -1,0 +1,208 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <meta name="theme-color" content="#0b1020" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Jorrob Projects" />
+  <meta name="description" content="Centro progetti personale per lavorare con ChatGPT in modo ordinato." />
+  <link rel="manifest" href="./manifest.webmanifest" />
+  <link rel="apple-touch-icon" href="./assets/icon.svg" />
+  <link rel="icon" href="./assets/icon.svg" />
+  <link rel="stylesheet" href="./assets/app.css" />
+  <title>Jorrob Projects</title>
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <div>
+        <div class="eyebrow">JORROB</div>
+        <h1 id="screenTitle">Projects</h1>
+      </div>
+      <button id="menuBtn" class="icon-btn" aria-label="Menu">•••</button>
+    </header>
+
+    <main id="appMain">
+      <section class="screen active" data-screen="projects">
+        <div class="hero-card">
+          <div>
+            <div class="eyebrow">CENTRO DI CONTROLLO</div>
+            <h2>I tuoi progetti, senza perdere il filo.</h2>
+            <p>Versioni, problemi, idee e prossima richiesta per ChatGPT nello stesso posto.</p>
+          </div>
+          <button id="newProjectBtn" class="primary big">+ Nuovo progetto</button>
+        </div>
+
+        <div class="section-title-row">
+          <h3>Progetti</h3>
+          <button id="sortProjectsBtn" class="text-btn">Ordina</button>
+        </div>
+        <div id="projectList" class="project-list"></div>
+      </section>
+
+      <section class="screen" data-screen="inbox">
+        <div class="section-intro">
+          <div class="eyebrow">RACCOLTA RAPIDA</div>
+          <h2>Inbox</h2>
+          <p>Butta qui idee, problemi, screenshot o file. Li colleghi a un progetto e non si perdono.</p>
+        </div>
+
+        <article class="card composer">
+          <label>Progetto
+            <select id="inboxProject"></select>
+          </label>
+          <div class="segmented" id="inboxType">
+            <button class="active" data-value="idea">Idea</button>
+            <button data-value="bug">Problema</button>
+            <button data-value="note">Nota</button>
+            <button data-value="reference">Riferimento</button>
+          </div>
+          <label>Scrivi al volo
+            <textarea id="inboxText" rows="5" placeholder="Es. con 3 immagini si blocca dopo il codice fiscale..."></textarea>
+          </label>
+          <label class="file-picker">Allega file
+            <input id="inboxFiles" type="file" multiple />
+            <span id="inboxFilesLabel">Nessun file selezionato</span>
+          </label>
+          <button id="saveInboxBtn" class="primary full">Salva in Inbox</button>
+        </article>
+
+        <div class="section-title-row"><h3>Da lavorare</h3><span id="inboxCount" class="muted"></span></div>
+        <div id="inboxList" class="stack"></div>
+      </section>
+
+      <section class="screen" data-screen="request">
+        <div class="section-intro">
+          <div class="eyebrow">PARLANE CON CHATGPT</div>
+          <h2>Richiesta</h2>
+          <p>Scegli il progetto e scrivi solo cosa vuoi fare. Il resto del contesto lo prepara l'app.</p>
+        </div>
+
+        <article class="card">
+          <label>Progetto
+            <select id="requestProject"></select>
+          </label>
+          <label>Cosa vuoi fare adesso?
+            <textarea id="requestText" rows="6" placeholder="Es. sistema il ritaglio della patente senza toccare il codice fiscale che è già perfetto"></textarea>
+          </label>
+          <label class="check-row"><input type="checkbox" id="includeInbox" checked /> Includi gli ultimi elementi Inbox aperti</label>
+          <label class="check-row"><input type="checkbox" id="includeVersions" checked /> Includi cronologia recente</label>
+          <button id="generateRequestBtn" class="primary full">Prepara richiesta</button>
+        </article>
+
+        <article id="requestOutputCard" class="card output-card hidden">
+          <div class="section-title-row"><h3>Pronta per ChatGPT</h3><span class="success-dot">●</span></div>
+          <textarea id="requestOutput" rows="16" readonly></textarea>
+          <div class="button-grid">
+            <button id="copyRequestBtn" class="primary">Copia</button>
+            <button id="shareRequestBtn" class="secondary">Condividi</button>
+          </div>
+          <p class="tiny">Se hai allegati, caricali nella chat insieme al testo. L'app non invia automaticamente file o dati a ChatGPT.</p>
+        </article>
+      </section>
+
+      <section class="screen" data-screen="review">
+        <div class="section-intro">
+          <div class="eyebrow">COLLAUDO</div>
+          <h2>Review</h2>
+          <p>Registri in pochi secondi se una versione va bene, è da sistemare o va bocciata.</p>
+        </div>
+
+        <article class="card">
+          <label>Progetto
+            <select id="reviewProject"></select>
+          </label>
+          <div class="form-grid two">
+            <label>Versione testata<input id="reviewVersion" type="text" placeholder="Es. 1.9.14" /></label>
+            <label>Esito
+              <select id="reviewStatus">
+                <option value="stable">✅ Approvata</option>
+                <option value="test">🟡 Da sistemare</option>
+                <option value="rejected">❌ Bocciata</option>
+              </select>
+            </label>
+          </div>
+          <label>Cosa funziona<textarea id="reviewGood" rows="4" placeholder="Es. carta identità perfetta, export PDF ok"></textarea></label>
+          <label>Cosa non va<textarea id="reviewBad" rows="5" placeholder="Es. patente storta, retro CI tagliato sotto"></textarea></label>
+          <label>Nota per la prossima modifica<textarea id="reviewNext" rows="3" placeholder="Es. non toccare il CF"></textarea></label>
+          <button id="saveReviewBtn" class="primary full">Registra review</button>
+        </article>
+
+        <div class="section-title-row"><h3>Ultime review</h3></div>
+        <div id="reviewList" class="stack"></div>
+      </section>
+
+      <section class="screen" data-screen="versions">
+        <div class="section-intro">
+          <div class="eyebrow">CRONOLOGIA</div>
+          <h2>Versioni</h2>
+          <p>Vedi subito qual è l'ultima versione buona e quali tentativi hanno introdotto regressioni.</p>
+        </div>
+
+        <label class="standalone-label">Progetto
+          <select id="versionsProject"></select>
+        </label>
+        <div id="versionSummary" class="version-summary"></div>
+        <div id="versionTimeline" class="timeline"></div>
+      </section>
+    </main>
+
+    <nav class="bottom-nav" aria-label="Navigazione principale">
+      <button class="active" data-nav="projects"><span>▦</span><small>Progetti</small></button>
+      <button data-nav="inbox"><span>＋</span><small>Inbox</small></button>
+      <button data-nav="request"><span>↗</span><small>Richiesta</small></button>
+      <button data-nav="review"><span>✓</span><small>Review</small></button>
+      <button data-nav="versions"><span>≋</span><small>Versioni</small></button>
+    </nav>
+  </div>
+
+  <dialog id="projectDialog" class="sheet-dialog">
+    <form method="dialog" class="sheet">
+      <div class="sheet-handle"></div>
+      <div class="section-title-row"><h2 id="projectDialogTitle">Nuovo progetto</h2><button value="cancel" class="icon-btn">×</button></div>
+      <input id="projectId" type="hidden" />
+      <label>Nome<input id="projectName" type="text" placeholder="Es. DocFix" /></label>
+      <div class="form-grid two">
+        <label>Versione attuale<input id="projectVersion" type="text" placeholder="Es. 1.9.13" /></label>
+        <label>Stato
+          <select id="projectStatus">
+            <option value="stable">✅ Stabile</option>
+            <option value="test">🟡 In test</option>
+            <option value="idea">💡 Idea</option>
+            <option value="paused">⏸ In pausa</option>
+          </select>
+        </label>
+      </div>
+      <label>Obiettivo<textarea id="projectGoal" rows="4" placeholder="Cosa deve fare bene questo progetto?"></textarea></label>
+      <label>Funzioni approvate da non rompere<textarea id="projectLocked" rows="5" placeholder="Una per riga"></textarea></label>
+      <label>Problemi aperti<textarea id="projectIssues" rows="5" placeholder="Uno per riga"></textarea></label>
+      <label>Prossima cosa da fare<input id="projectNext" type="text" placeholder="Es. sistemare anteprima PC" /></label>
+      <div class="button-grid">
+        <button id="saveProjectBtn" value="cancel" class="primary">Salva</button>
+        <button id="deleteProjectBtn" value="cancel" class="danger hidden">Elimina</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog id="menuDialog" class="sheet-dialog">
+    <form method="dialog" class="sheet small-sheet">
+      <div class="sheet-handle"></div>
+      <div class="section-title-row"><h2>Jorrob Projects</h2><button value="cancel" class="icon-btn">×</button></div>
+      <button id="installBtn" value="cancel" class="menu-action hidden">Installa app</button>
+      <button id="exportBtn" value="cancel" class="menu-action">Esporta backup</button>
+      <label class="menu-action file-menu">Importa backup<input id="importInput" type="file" accept="application/json,.json" /></label>
+      <button id="resetBtn" value="cancel" class="menu-action danger-text">Azzera tutti i dati</button>
+      <p class="tiny">I dati restano sul dispositivo. Gli allegati vengono salvati localmente nel browser.</p>
+      <p class="tiny">Versione app <strong>1.0.0</strong></p>
+    </form>
+  </dialog>
+
+  <template id="emptyTemplate">
+    <div class="empty-state"><strong>Niente qui per ora.</strong><span>Aggiungi il primo elemento e comparirà qui.</span></div>
+  </template>
+
+  <script src="./assets/app.js" defer></script>
+</body>
+</html>
