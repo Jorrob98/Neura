@@ -1,0 +1,25 @@
+name: Validate Jorrob Projects
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate static app
+        run: |
+          test -f index.html
+          test -f assets/app.css
+          test -f assets/app.js
+          test -f manifest.webmanifest
+          test -f sw.js
+          node --check assets/app.js
+          python -m json.tool manifest.webmanifest >/dev/null
+          grep -q "jorrob-projects-v1.0.0" sw.js
+          grep -q "manifest.webmanifest" index.html
+          echo "Jorrob Projects validation passed"
