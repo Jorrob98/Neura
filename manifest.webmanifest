@@ -1,0 +1,15 @@
+{
+  "id":"./",
+  "name":"Jorrob Projects",
+  "short_name":"Jorrob",
+  "description":"Centro progetti personale per lavorare con ChatGPT in modo ordinato.",
+  "start_url":"./",
+  "scope":"./",
+  "display":"standalone",
+  "background_color":"#07101f",
+  "theme_color":"#0b1020",
+  "orientation":"portrait-primary",
+  "icons":[
+    {"src":"./assets/icon.svg","sizes":"any","type":"image/svg+xml","purpose":"any maskable"}
+  ]
+}
